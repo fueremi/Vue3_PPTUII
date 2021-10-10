@@ -20,8 +20,8 @@
             <input
               type="text"
               class="form-control"
-              id="nama"
-              placeholder="Masukkan nama anda"
+              id="inisial_nama"
+              placeholder="Masukkan inisial nama anda"
             />
           </div>
           <div class="col-md-6 mb-3">
@@ -52,11 +52,11 @@
             </div>
           </div>
           <div class="col-md-6 mb-3">
-            <label for="nama" class="form-label">Username</label>
+            <label for="username" class="form-label">Username</label>
             <input
               type="text"
               class="form-control"
-              id="nama"
+              id="username"
               placeholder="Masukkan username anda"
             />
           </div>
@@ -92,7 +92,9 @@
         </div>
         <small class="mb-3 d-block"
           >Sudah memiliki akun?
-          <router-link :to="{ name: 'Home' }">register disini!</router-link>
+          <router-link class="text-primary" :to="{ name: 'Home' }"
+            >Login disini!</router-link
+          >
         </small>
         <button type="button" class="btn btn-primary">Submit</button>
       </form>

@@ -1,5 +1,6 @@
 <template>
   <Navbar />
+  <Loading v-if="loading" />
   <div class="home d-flex justify-content-center align-items-center">
     <div class="login-container">
       <form @submit.prevent="onSubmit">
@@ -7,7 +8,7 @@
         <div class="mb-3">
           <label for="email" class="form-label">Username/Email</label>
           <input
-            type="email"
+            type="text"
             class="form-control"
             id="email"
             placeholder="Masukkan email anda"
@@ -26,7 +27,9 @@
         </div>
         <small class="mb-3 d-block"
           >Belum memiliki akun?
-          <router-link :to="{ name: 'Daftar' }">Register disini!</router-link>
+          <router-link class="text-primary" :to="{ name: 'Daftar' }"
+            >Register disini!</router-link
+          >
         </small>
         <input type="submit" class="btn btn-primary" />
       </form>
@@ -36,21 +39,97 @@
 
 <script>
 import Navbar from "@/components/Navbar";
+import Loading from "@/components/Loading";
+import Swal from "sweetalert2";
+import {
+  fetchUserOrEmail,
+  authUsertoPassword,
+  setSession,
+} from "@/services/apis/auth";
+import { v4 as uuidv4 } from "uuid";
 
 export default {
   name: "Home",
   components: {
     Navbar,
+    Loading,
   },
   data() {
     return {
-      email: "",
-      password: "",
+      email: null,
+      password: null,
+      loading: false,
     };
   },
   methods: {
-    onSubmit() {
-      console.log("Submitted!");
+    async onSubmit() {
+      if (!this.email) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          html:
+            "<span class='text-primary'>Username/Email</span> kosong! <hr> <small>Silahkan masukkan <span class='text-primary'>Username/Email</span> anda!</small>",
+        });
+        return;
+      } else if (!this.password) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          html:
+            "<span class='text-primary'>Password</span> kosong! <hr> <small>Silahkan masukkan <span class='text-primary'>Password</span> anda!</small>",
+        });
+        return;
+      }
+      this.loading = true;
+      const user = await fetchUserOrEmail(this.email);
+
+      if (user.length !== 1) {
+        this.loading = false;
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          html: `<span class="text-primary">Username/Email</span> tidak ditemukan. <br>Jika anda belum memiliki akun, silahkan Daftar akun!`,
+        });
+        this.username = "";
+        this.password = "";
+        return;
+      }
+
+      const userInfo = await authUsertoPassword({
+        id: user[0].id,
+        password: this.password,
+      });
+
+      if (userInfo.length !== 1) {
+        this.loading = false;
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          html: `<span class="text-primary">Password</span> salah. <br>Pastikan password yang di-input benar! <hr> <small>Jika anda lupa password anda, silahkan hubungi <span class="text-primary">Admin PPTUII</span></small>`,
+          footer: ``,
+        });
+        this.password = "";
+        return;
+      }
+
+      const session_id = uuidv4();
+      await setSession({ id: user[0].id, sessionId: session_id });
+
+      localStorage.setItem("userInfo", JSON.stringify(userInfo[0]));
+      localStorage.setItem("session", session_id);
+
+      this.username = "";
+      this.password = "";
+
+      Swal.fire({
+        icon: "success",
+        title: "Yeay",
+        html: `Berhasil login. <hr>Mengarahkan anda ke halaman <span class="text-primary">Home</span>`,
+      });
+
+      console.log(localStorage.getItem("session"));
+
+      this.loading = false;
     },
   },
 };

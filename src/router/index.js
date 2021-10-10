@@ -4,7 +4,7 @@ import Daftar from '../views/Daftar.vue'
 
 const routes = [
   {
-    path: '/',
+    path: '/login',
     name: 'Home',
     component: Home
   },

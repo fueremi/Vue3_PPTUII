@@ -20,4 +20,8 @@ body {
   background-color: #8e64f3 !important;
   border-color: #8e64f3 !important;
 }
+
+.text-primary {
+  color: #8e64f3 !important;
+}
 </style>
