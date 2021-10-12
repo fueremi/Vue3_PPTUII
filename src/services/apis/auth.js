@@ -121,3 +121,28 @@ export const verifySession = async (payload) => {
     return;
   }
 };
+
+export const registerUser = async (payload) => {
+  const API_QUERY = `
+  mutation addNewPasien {
+    insert_pptuii_v2_user(objects: {email: "${payload.email}", initial: "${payload.initial}", jenis_kelamin: "${payload.jenis_kelamin}", nama: "${payload.nama}", no_hp: "${payload.no_hp}", password: "${payload.password}", role: "Pasien", username: "${payload.username}"}) {
+      affected_rows
+    }
+  }  
+  `;
+  try {
+    const data = await axios.post(
+      API_URL,
+      { query: API_QUERY },
+      { headers: API_HEADERS }
+    );
+    return data.data.data.insert_pptuii_v2_user;
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: `${error}`,
+    });
+    return;
+  }
+};

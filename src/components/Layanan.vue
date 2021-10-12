@@ -5,7 +5,7 @@
       {{ layanan.deskripsi }}
     </p>
 
-    <button class="mb-auto btn btn-primary">Daftar</button>
+    <button class="mb-auto btn btn-light text-primary">Daftar</button>
   </div>
 </template>
 
@@ -29,6 +29,10 @@ export default {
 
   button {
     font-size: 14px;
+
+    &:hover {
+      font-weight: bold;
+    }
   }
 }
 </style>

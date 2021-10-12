@@ -1,13 +1,13 @@
 <template>
   <Loading v-if="loading" />
 
-  <div class="pasien-wrapper">
+  <div class="pasien-wrapper text-white">
     <div class="container">
       <div
         class="layanan-pasien d-flex flex-column align-items-center justify-content-center"
       >
         <div class="layanan-organisasi mb-4">
-          <h1 class="text-primary mb-3">Layanan Organisasi</h1>
+          <h1 class="mb-3">Layanan Organisasi</h1>
           <div class="row">
             <div
               class="col-md-6 mb-4"
@@ -19,7 +19,7 @@
           </div>
         </div>
         <div class="layanan-individu-keluarga mb-4">
-          <h1 class="text-primary mb-3">Layanan Individu & Keluarga</h1>
+          <h1 class="mb-3">Layanan Individu & Keluarga</h1>
           <div class="row">
             <div
               class="col-md-6 mb-4"
@@ -31,7 +31,7 @@
           </div>
         </div>
         <div class="online-assessment">
-          <h1 class="text-primary mb-3">Online Assessment</h1>
+          <h1 class="mb-3">Online Assessment</h1>
           <div class="row">
             <div
               class="col-md-6 mb-4"
@@ -103,7 +103,7 @@ export default {
     max-width: 791px;
     padding: 32px;
     border-radius: 5px;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.35);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
@@ -112,7 +112,8 @@ export default {
     min-width: 360px;
 
     h1 {
-      font-size: 16px;
+      font-size: 20px;
+      text-decoration: underline;
     }
   }
 }
