@@ -88,3 +88,36 @@ export const setSession = async (payload) => {
     return;
   }
 };
+
+export const verifySession = async (payload) => {
+  const API_QUERY = `
+  query getSessionByUser {
+    pptuii_v2_user(where: {_and: [{id: {_eq: "${payload.id}"}}, {session: {_eq: "${payload.session}"}}]}) {
+      email
+      initial
+      nama
+      no_hp
+      password
+      role
+      session
+      username
+      id
+    }
+  }
+  `;
+  try {
+    const data = await axios.post(
+      API_URL,
+      { query: API_QUERY },
+      { headers: API_HEADERS }
+    );
+    return data.data.data.pptuii_v2_user;
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: `${error}`,
+    });
+    return;
+  }
+};

@@ -1,5 +1,4 @@
 <template>
-  <Navbar />
   <div class="register d-flex justify-content-center align-items-center">
     <div class="register-container">
       <form @submit.prevent="onSubmit">
@@ -92,7 +91,7 @@
         </div>
         <small class="mb-3 d-block"
           >Sudah memiliki akun?
-          <router-link class="text-primary" :to="{ name: 'Home' }"
+          <router-link class="text-primary" :to="{ name: 'Login' }"
             >Login disini!</router-link
           >
         </small>
@@ -103,13 +102,8 @@
 </template>
 
 <script>
-import Navbar from "@/components/Navbar";
-
 export default {
   name: "Register",
-  components: {
-    Navbar,
-  },
   data() {
     return {
       no_hp: null,

@@ -1,5 +1,4 @@
 <template>
-  <Navbar />
   <Loading v-if="loading" />
   <div class="home d-flex justify-content-center align-items-center">
     <div class="login-container">
@@ -38,7 +37,6 @@
 </template>
 
 <script>
-import Navbar from "@/components/Navbar";
 import Loading from "@/components/Loading";
 import Swal from "sweetalert2";
 import {
@@ -51,7 +49,6 @@ import { v4 as uuidv4 } from "uuid";
 export default {
   name: "Home",
   components: {
-    Navbar,
     Loading,
   },
   data() {
@@ -63,6 +60,7 @@ export default {
   },
   methods: {
     async onSubmit() {
+      // ? Validasi email/username dan password sudah terisi
       if (!this.email) {
         Swal.fire({
           icon: "error",
@@ -83,12 +81,13 @@ export default {
       this.loading = true;
       const user = await fetchUserOrEmail(this.email);
 
+      // ? Validasi jika email/username belum terdaftar
       if (user.length !== 1) {
         this.loading = false;
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          html: `<span class="text-primary">Username/Email</span> tidak ditemukan. <br>Jika anda belum memiliki akun, silahkan Daftar akun!`,
+          html: `<span class="text-primary">Username/Email</span> tidak ditemukan. <hr> <small>Jika anda belum memiliki akun, silahkan Daftar akun!</small>`,
         });
         this.username = "";
         this.password = "";
@@ -100,6 +99,7 @@ export default {
         password: this.password,
       });
 
+      // ? Validasi jika email/username sesuai dengan password
       if (userInfo.length !== 1) {
         this.loading = false;
         Swal.fire({
@@ -112,11 +112,16 @@ export default {
         return;
       }
 
-      const session_id = uuidv4();
-      await setSession({ id: user[0].id, sessionId: session_id });
+      const session_info = {
+        id: user[0].id,
+        session: uuidv4(),
+      };
 
-      localStorage.setItem("userInfo", JSON.stringify(userInfo[0]));
-      localStorage.setItem("session", session_id);
+      await setSession({ id: user[0].id, sessionId: session_info.session });
+
+      // ? Assign informasi user dan session ke local storage
+      this.$store.dispatch("setSession", userInfo);
+      localStorage.setItem("session", JSON.stringify(session_info));
 
       this.username = "";
       this.password = "";
@@ -124,12 +129,11 @@ export default {
       Swal.fire({
         icon: "success",
         title: "Yeay",
-        html: `Berhasil login. <hr>Mengarahkan anda ke halaman <span class="text-primary">Home</span>`,
+        html: `Berhasil login. <hr><small>Mengarahkan anda ke halaman <span class="text-primary">Home</span></small>`,
       });
 
-      console.log(localStorage.getItem("session"));
-
       this.loading = false;
+      this.$router.push({ name: "HomePasien" });
     },
   },
 };

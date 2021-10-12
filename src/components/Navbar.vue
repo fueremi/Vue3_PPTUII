@@ -26,12 +26,52 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav ms-auto">
+      <div
+        class="collapse navbar-collapse"
+        id="navbarNavAltMarkup"
+        v-if="this.$store.state.session"
+      >
+        <div class="navbar-nav me-auto">
           <a class="nav-link active" aria-current="page" href="#">Home</a>
-          <a class="nav-link" href="#">Layanan</a>
+          <router-link class="nav-link" to="/pasien/layanan"
+            >Layanan</router-link
+          >
           <a class="nav-link" href="#">Kontak</a>
-          <a href="#" class="nav-link">Login</a>
+        </div>
+        <div class="navbar-nav ms-auto">
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle text-capitalize d-flex align-items-center"
+              href="#"
+              id="navbarDropdownMenuLink"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <div
+                class="d-flex justify-content-center align-items-center gap-2"
+              >
+                <span class="profile text-uppercase">
+                  {{ this.$store.state.session.initial }}
+                </span>
+                {{ this.$store.state.session.nama }}
+                <span class="text-primary"
+                  >({{ this.$store.state.session.role }})</span
+                >
+              </div>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <li>
+                <button
+                  class="text-start btn nav-link dropdown-item"
+                  v-if="this.$store.state.session"
+                  @click="onClickLogout"
+                >
+                  Logout
+                </button>
+              </li>
+            </ul>
+          </li>
         </div>
       </div>
     </div>
@@ -39,8 +79,42 @@
 </template>
 
 <script>
+import Swal from "sweetalert2";
+
 export default {
   name: "Navbar",
+  methods: {
+    onClickLogout() {
+      Swal.fire({
+        title: "Anda akan logout!",
+        icon: "info",
+        html: `Apakah anda yakin akan <span class="text-primary">Logout</span> ? <hr> <small>Jika anda <span class="text-primary">Logout</span>, maka anda harus <span class="text-primary">Login</span> kembali!</small>`,
+        showCancelButton: true,
+        confirmButtonText: `Benar`,
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          this.$store.state.session = null;
+          localStorage.removeItem("session");
+
+          Swal.fire({
+            icon: "success",
+            title: "Yeay! Berhasil Logout",
+            html: `Kamu akan dialihkan ke <span class="text-primary">Halaman Home</span>`,
+          });
+          this.$router.push({ name: "Login" });
+          return;
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Batal",
+            html: `<span class='text-primary'>Logout</span> dibatalkan!`,
+          });
+          return;
+        }
+      });
+    },
+  },
 };
 </script>
 
@@ -52,8 +126,24 @@ export default {
     line-height: 1.2;
   }
 
+  .router-link-exact-active {
+    color: #8e64f3;
+    font-weight: bold;
+  }
+
   .nav-link {
     font-size: 14px;
+  }
+
+  .profile {
+    display: flex;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    background-color: #8e64f3;
+    color: #fff;
+    border-radius: 50%;
   }
 }
 </style>
