@@ -140,6 +140,7 @@ export default {
   },
   methods: {
     async onSubmit() {
+      // ? Validasi jika field kosong
       this.loading = true;
       if (
         !this.nama ||
@@ -160,6 +161,9 @@ export default {
         return;
       }
 
+      // todo validasi no_hp, email dan username (unique)
+
+      // ? validasi konfirmasi password dengan password
       if (this.password !== this.konfirmasi_password) {
         Swal.fire({
           icon: "error",
