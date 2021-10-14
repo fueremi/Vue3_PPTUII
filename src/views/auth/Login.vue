@@ -120,7 +120,7 @@ export default {
       await setSession({ id: user[0].id, sessionId: session_info.session });
 
       // ? Assign informasi user dan session ke local storage
-      this.$store.dispatch("setSession", userInfo);
+      await this.$store.dispatch("setSession", userInfo[0]);
       localStorage.setItem("session", JSON.stringify(session_info));
 
       this.username = "";
@@ -133,7 +133,13 @@ export default {
       });
 
       this.loading = false;
-      this.$router.push({ name: "HomePasien" });
+      if (this.$store.state.session.role === "klien") {
+        this.$router.push({ name: "HomeKlien" });
+      } else if (this.$store.state.session.role === "psikolog") {
+        this.$router.push({ name: "HomePsikolog" });
+      } else if (this.$store.state.session.role === "administrator") {
+        this.$router.push({ name: "HomeAdmin" });
+      }
     },
   },
 };

@@ -93,17 +93,16 @@ export default {
 .pasien-wrapper {
   min-height: 669.6px;
   width: 100%;
-  background: url("https://pptuii.id/wp-content/uploads/2020/11/abstract.png")
-    no-repeat center center/cover;
   padding: 20px;
 
   .layanan-organisasi,
   .layanan-individu-keluarga,
   .online-assessment {
+    background: url("https://pptuii.id/wp-content/uploads/2020/11/abstract.png")
+      no-repeat center center/cover;
     max-width: 791px;
     padding: 32px;
     border-radius: 5px;
-    background: rgba(255, 255, 255, 0.35);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);

@@ -5,8 +5,15 @@ import Swal from "sweetalert2";
 
 import Login from "@/views/auth/Login";
 import Daftar from "@/views/auth/Daftar";
-import HomePasien from "@/views/pasien/Home";
-import LayananPasien from "@/views/pasien/Layanan";
+
+// ? Pasien
+import HomeKlien from "@/views/klien/Home";
+import LayananKlien from "@/views/klien/Layanan";
+import TambahPemeriksaanKlien from "@/views/klien/Pemeriksaan";
+
+// ? Psikolog
+import HomePsikolog from "@/views/psikolog/Home";
+import PraktekPsikolog from "@/views/psikolog/Praktek";
 
 const routes = [
   {
@@ -20,16 +27,29 @@ const routes = [
     component: Daftar,
   },
   {
-    path: "/pasien",
-    name: "HomePasien",
-    component: HomePasien,
-    children: [
-      {
-        path: "layanan",
-        name: "LayananPasien",
-        component: LayananPasien,
-      },
-    ],
+    path: "/klien",
+    name: "HomeKlien",
+    component: HomeKlien,
+  },
+  {
+    path: "/layanan",
+    name: "LayananKlien",
+    component: LayananKlien,
+  },
+  {
+    path: "/pemeriksaan/:id",
+    name: "TambahPemeriksaanKlien",
+    component: TambahPemeriksaanKlien,
+  },
+  {
+    path: "/psikolog",
+    name: "HomePsikolog",
+    component: HomePsikolog,
+  },
+  {
+    path: "/praktek",
+    name: "PraktekPsikolog",
+    component: PraktekPsikolog,
   },
 ];
 

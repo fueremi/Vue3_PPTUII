@@ -36,4 +36,20 @@ body {
 .text-primary {
   color: #8e64f3 !important;
 }
+
+.text-h1 {
+  font-size: 20px;
+}
+
+.text-h2 {
+  font-size: 16px;
+}
+
+.text-h3 {
+  font-size: 12px !important;
+}
+
+.back-button {
+  font-size: 14px;
+}
 </style>

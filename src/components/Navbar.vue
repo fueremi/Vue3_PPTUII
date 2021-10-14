@@ -31,12 +31,35 @@
         id="navbarNavAltMarkup"
         v-if="this.$store.state.session"
       >
-        <div class="navbar-nav me-auto">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-          <router-link class="nav-link" to="/pasien/layanan"
-            >Layanan</router-link
+        <div
+          class="navbar-nav me-auto"
+          v-if="this.$store.state.session.role === 'klien'"
+        >
+          <router-link
+            class="nav-link"
+            aria-current="page"
+            :to="{ name: 'HomeKlien' }"
+            >Home</router-link
           >
-          <a class="nav-link" href="#">Kontak</a>
+          <router-link class="nav-link" to="/layanan">Layanan</router-link>
+        </div>
+        <div
+          class="navbar-nav me-auto"
+          v-else-if="this.$store.state.session.role === 'psikolog'"
+        >
+          <router-link
+            class="nav-link"
+            aria-current="page"
+            :to="{ name: 'HomePsikolog' }"
+            >Home</router-link
+          >
+          <router-link
+            class="nav-link"
+            aria-current="page"
+            :to="{ name: 'PraktekPsikolog' }"
+            >Praktek</router-link
+          >
+          <!-- <router-link class="nav-link" to="/layanan">Layanan</router-link> -->
         </div>
         <div class="navbar-nav ms-auto">
           <li class="nav-item dropdown">
@@ -127,7 +150,7 @@ export default {
   }
 
   .router-link-exact-active {
-    color: #8e64f3;
+    color: #8e64f3 !important;
     font-weight: bold;
   }
 

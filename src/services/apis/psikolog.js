@@ -7,26 +7,25 @@ const API_HEADERS = {
   "x-hasura-admin-secret": "3yYlj28KnyN4",
 };
 
-export const fetchAllLayanan = async () => {
+export const getJadwalPsikologById = async (payload) => {
   // pptuii_v2_layanan(where: {kategori: {_eq: "Layanan Organisasi"}}) {
   const API_QUERY = `
-  query getAllLayanan {
-    pptuii_v2_layanan {
-      deskripsi
+  query getJadwalPraktekById {
+    pptuii_v2_jadwal_praktek(where: {id_psikolog: {_eq: "${payload}"}}) {
       id
-      kategori
-      nama
-      status
+      hari
+      jam_mulai
+      jam_selesai
     }
   }  
-  `;
+    `;
   try {
     const data = await axios.post(
       API_URL,
       { query: API_QUERY },
       { headers: API_HEADERS }
     );
-    return data.data.data.pptuii_v2_layanan;
+    return data.data.data.pptuii_v2_jadwal_praktek;
   } catch (error) {
     Swal.fire({
       icon: "error",
@@ -37,26 +36,22 @@ export const fetchAllLayanan = async () => {
   }
 };
 
-export const getLayananById = async (payload) => {
+export const addNewJadwalPraktek = async (payload) => {
   // pptuii_v2_layanan(where: {kategori: {_eq: "Layanan Organisasi"}}) {
   const API_QUERY = `
-  query getLayananById {
-    pptuii_v2_layanan(where: {id: {_eq: "${payload}"}}) {
-      deskripsi
-      id
-      kategori
-      nama
-      status
+  mutation addNewJadwalPraktek {
+    insert_pptuii_v2_jadwal_praktek(objects: {hari: "${payload.hari}", id_psikolog: "${payload.id_psikolog}", jam_mulai: "${payload.jam_mulai}", jam_selesai: "${payload.jam_selesai}"}) {
+      affected_rows
     }
   }  
-  `;
+    `;
   try {
     const data = await axios.post(
       API_URL,
       { query: API_QUERY },
       { headers: API_HEADERS }
     );
-    return data.data.data.pptuii_v2_layanan[0];
+    return data.data.data.insert_pptuii_v2_jadwal_praktek;
   } catch (error) {
     Swal.fire({
       icon: "error",

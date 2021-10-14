@@ -5,7 +5,11 @@
       {{ layanan.deskripsi }}
     </p>
 
-    <button class="mb-auto btn btn-light text-primary">Daftar</button>
+    <router-link
+      :to="{ name: 'TambahPemeriksaanKlien', params: { id: layanan.id } }"
+      class="mb-auto btn btn-light text-primary"
+      >Daftar</router-link
+    >
   </div>
 </template>
 
@@ -27,7 +31,7 @@ export default {
     font-size: 14px;
   }
 
-  button {
+  a {
     font-size: 14px;
 
     &:hover {
