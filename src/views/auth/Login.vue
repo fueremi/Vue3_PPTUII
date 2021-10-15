@@ -135,7 +135,10 @@ export default {
       this.loading = false;
       if (this.$store.state.session.role === "klien") {
         this.$router.push({ name: "HomeKlien" });
-      } else if (this.$store.state.session.role === "psikolog") {
+      } else if (
+        this.$store.state.session.role === "psikolog" ||
+        this.$store.state.session.role === "associate"
+      ) {
         this.$router.push({ name: "HomePsikolog" });
       } else if (this.$store.state.session.role === "administrator") {
         this.$router.push({ name: "HomeAdmin" });

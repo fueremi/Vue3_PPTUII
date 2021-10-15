@@ -61,3 +61,63 @@ export const addNewJadwalPraktek = async (payload) => {
     return;
   }
 };
+
+export const deleteJadwalPraktek = async (payload) => {
+  // pptuii_v2_layanan(where: {kategori: {_eq: "Layanan Organisasi"}}) {
+  const API_QUERY = `
+  mutation deleteJadwalPraktek {
+    delete_pptuii_v2_jadwal_praktek(where: {id: {_eq: "${payload}"}}) {
+      affected_rows
+    }
+  }  
+    `;
+  try {
+    const data = await axios.post(
+      API_URL,
+      { query: API_QUERY },
+      { headers: API_HEADERS }
+    );
+    return data.data.data.delete_pptuii_v2_jadwal_praktek;
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: `${error}`,
+    });
+    return;
+  }
+};
+
+export const getJadwalById = async (payload) => {
+  // pptuii_v2_layanan(where: {kategori: {_eq: "Layanan Organisasi"}}) {
+  const API_QUERY = `
+  query getJadwalById {
+    pptuii_v2_jadwal_praktek(where: {id: {_eq: "${payload}"}}) {
+      id
+      id_psikolog
+      hari
+      jam_mulai
+      jam_selesai
+      user {
+        nama
+        role
+      }
+    }
+  }  
+    `;
+  try {
+    const data = await axios.post(
+      API_URL,
+      { query: API_QUERY },
+      { headers: API_HEADERS }
+    );
+    return data.data.data.pptuii_v2_jadwal_praktek[0];
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: `${error}`,
+    });
+    return;
+  }
+};

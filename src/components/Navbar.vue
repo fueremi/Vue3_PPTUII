@@ -45,7 +45,10 @@
         </div>
         <div
           class="navbar-nav me-auto"
-          v-else-if="this.$store.state.session.role === 'psikolog'"
+          v-else-if="
+            this.$store.state.session.role === 'psikolog' ||
+              this.$store.state.session.role === 'associate'
+          "
         >
           <router-link
             class="nav-link"

@@ -3,7 +3,7 @@
   <div class="praktek-psikolog">
     <div class="container mt-3">
       <h1 class="text-h1 mb-5">
-        Selamat datang, Psikolog
+        Selamat datang, {{ this.$store.state.session.role }}
         <span class="text-primary text-capitalize text-decoration-underline">{{
           this.$store.state.session.nama
         }}</span>
@@ -30,7 +30,11 @@
           v-for="jadwalPsikolog in jadwalPsikolog"
           :key="jadwalPsikolog.id"
         >
-          <JadwalCard :jadwal="jadwalPsikolog" :toggle="toggle" />
+          <JadwalCard
+            :jadwal="jadwalPsikolog"
+            :toggle="toggle"
+            @onClickDelete="actionDelete"
+          />
         </div>
       </div>
     </div>
@@ -109,7 +113,11 @@
             >
               Close
             </button>
-            <input type="submit" class="text-h3 btn btn-primary" />
+            <input
+              type="submit"
+              class="text-h3 btn btn-primary"
+              data-bs-dismiss="modal"
+            />
           </div>
         </div>
       </form>
@@ -121,6 +129,7 @@
 import {
   getJadwalPsikologById,
   addNewJadwalPraktek,
+  deleteJadwalPraktek,
 } from "@/services/apis/psikolog";
 
 import Datepicker from "vue3-date-time-picker";
@@ -197,6 +206,15 @@ export default {
       };
       this.loading = true;
       const success = await addNewJadwalPraktek(newJadwalPraktek);
+      this.hariSelected = null;
+      this.jam_mulai = {
+        hours: 6,
+        minutes: 0,
+      };
+      this.jam_selesai = {
+        hours: 9,
+        minutes: 0,
+      };
 
       if (success.affected_rows > 0) {
         Swal.fire({
@@ -231,6 +249,40 @@ export default {
           return `${payload.hours}:${payload.minutes}`;
         }
       }
+    },
+    async actionDelete(id) {
+      this.loading = true;
+      Swal.fire({
+        title: "Apakah kamu yakin?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#8e64f3",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yakin",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const success = await deleteJadwalPraktek(id);
+          if (success.affected_rows > 0) {
+            Swal.fire({
+              icon: "success",
+              title: "Yeay...",
+              html: `<span class="text-primary">Jadwal Pratek</span> berhasil dihapus!`,
+            });
+            this.jadwalPsikolog = await getJadwalPsikologById(
+              this.$store.state.session.id
+            );
+            this.toggle = false;
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              html: `<span class="text-primary">Jadwal Pratek</span> gagal dihapus!`,
+            });
+          }
+        }
+      });
+
+      this.loading = false;
     },
   },
   async created() {
