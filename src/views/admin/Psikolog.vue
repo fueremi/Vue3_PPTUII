@@ -12,17 +12,33 @@
       <h2 class="text-h2">
         Master <span class="text-primary">Psikolog/Associate</span>
       </h2>
-      <router-link
-        class="btn btn-primary text-h3"
-        :to="{ name: 'LayananKlien' }"
-        >Tambah</router-link
-      >
+      <div class="d-flex justify-content-between align-items-center">
+        <router-link
+          class="btn btn-primary text-h3"
+          :to="{ name: 'LayananKlien' }"
+          >Tambah</router-link
+        >
+        <button class="btn btn-primary mb-3 text-h3" @click="onToggle">
+          Edit
+        </button>
+      </div>
+
+      <div class="row gap-3 mt-3">
+        <div
+          class="col-md-3"
+          v-for="psikologAssociate in psikologAssociate"
+          :key="psikologAssociate.id"
+        >
+          <TableUser :user="psikologAssociate" :toggle="toggle" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import Loading from "@/components/Loading";
+import TableUser from "@/components/TableUser";
 
 import { getUserPsikologAssociate } from "@/services/apis/user";
 
@@ -30,12 +46,19 @@ export default {
   name: "MasterPsikolog",
   components: {
     Loading,
+    TableUser,
   },
   data() {
     return {
       loading: false,
       psikologAssociate: null,
+      toggle: false,
     };
+  },
+  methods: {
+    onToggle() {
+      this.toggle = !this.toggle;
+    },
   },
   async created() {
     this.loading = true;

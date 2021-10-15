@@ -20,6 +20,7 @@ export const getUserPsikologAssociate = async () => {
           initial
           jenis_kelamin
           role
+          status
           username
         }
       }
@@ -54,6 +55,7 @@ export const getUserKlien = async () => {
             initial
             jenis_kelamin
             role
+            status
             username
           }
         }
@@ -65,6 +67,58 @@ export const getUserKlien = async () => {
       { headers: API_HEADERS }
     );
     return data.data.data.pptuii_v2_user;
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: `${error}`,
+    });
+    return;
+  }
+};
+
+export const updateNewPassword = async (payload) => {
+  // pptuii_v2_layanan(where: {kategori: {_eq: "Layanan Organisasi"}}) {
+  const API_QUERY = `
+    mutation updateNewPassword {
+      update_pptuii_v2_user(_set: {password: "${payload.password}"}, where: {id: {_eq: "${payload.id}"}}) {
+        affected_rows
+      }
+    }
+      `;
+  try {
+    const data = await axios.post(
+      API_URL,
+      { query: API_QUERY },
+      { headers: API_HEADERS }
+    );
+    return data.data.data.update_pptuii_v2_user.affected_rows;
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: `${error}`,
+    });
+    return;
+  }
+};
+
+export const updateNewStatus = async (payload) => {
+  // pptuii_v2_layanan(where: {kategori: {_eq: "Layanan Organisasi"}}) {
+  const API_QUERY = `
+    mutation updateNewStatus {
+      update_pptuii_v2_user(_set: {status: "${payload.status}"}, where: {id: {_eq: "${payload.id}"}}) {
+        affected_rows
+      }
+    }
+      `;
+  try {
+    const data = await axios.post(
+      API_URL,
+      { query: API_QUERY },
+      { headers: API_HEADERS }
+    );
+    return data.data.data.update_pptuii_v2_user.affected_rows;
   } catch (error) {
     Swal.fire({
       icon: "error",

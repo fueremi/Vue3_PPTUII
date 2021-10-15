@@ -140,7 +140,7 @@ export default {
         this.$store.state.session.role === "associate"
       ) {
         this.$router.push({ name: "HomePsikolog" });
-      } else if (this.$store.state.session.role === "administrator") {
+      } else if (this.$store.state.session.role === "admin") {
         this.$router.push({ name: "HomeAdmin" });
       }
     },

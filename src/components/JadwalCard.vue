@@ -65,10 +65,7 @@ export default {
     top: 5px;
     position: absolute;
     height: 5px;
-
-    &.fa-trash {
-      right: 5px;
-    }
+    right: 5px;
   }
 
   .profile {
