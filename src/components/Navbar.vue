@@ -45,6 +45,23 @@
         </div>
         <div
           class="navbar-nav me-auto"
+          v-if="this.$store.state.session.role === 'admin'"
+        >
+          <router-link
+            class="nav-link"
+            aria-current="page"
+            :to="{ name: 'HomeAdmin' }"
+            >Home</router-link
+          >
+          <router-link class="nav-link" :to="{ name: 'MasterPsikologAdmin' }"
+            >Psikolog/Associate</router-link
+          >
+          <router-link class="nav-link" :to="{ name: 'MasterKlien' }"
+            >Klien</router-link
+          >
+        </div>
+        <div
+          class="navbar-nav me-auto"
           v-else-if="
             this.$store.state.session.role === 'psikolog' ||
               this.$store.state.session.role === 'associate'

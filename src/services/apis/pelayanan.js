@@ -32,3 +32,123 @@ export const addNewPelayanan = async (payload) => {
     return;
   }
 };
+
+export const getAllPelayanan = async () => {
+  // pptuii_v2_layanan(where: {kategori: {_eq: "Layanan Organisasi"}}) {
+  const API_QUERY = `
+    query getAllPelayanan {
+      pptuii_v2_pelayanan {
+        id
+        id_jadwal_praktek
+        id_klien
+        id_layanan
+        id_psikologi
+        jadwal_praktek {
+          hari
+          jam_mulai
+          jam_selesai
+        }
+        layanan {
+          kategori
+          nama
+          deskripsi
+        }
+        status
+        tanggal
+        updated_at
+        user {
+          email
+          initial
+          jenis_kelamin
+          nama
+          no_hp
+          role
+        }
+        userByIdPsikologi {
+          email
+          initial
+          nama
+          jenis_kelamin
+          no_hp
+          no_karyawan
+          role
+        }
+      }
+    }
+  `;
+  try {
+    const data = await axios.post(
+      API_URL,
+      { query: API_QUERY },
+      { headers: API_HEADERS }
+    );
+    return data.data.data.pptuii_v2_pelayanan;
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: `${error}`,
+    });
+    return;
+  }
+};
+
+export const getPelayananByIdKlien = async (payload) => {
+  // pptuii_v2_layanan(where: {kategori: {_eq: "Layanan Organisasi"}}) {
+  const API_QUERY = `
+    query getPelayananByIdKlien {
+      pptuii_v2_pelayanan(where: {id_klien: {_eq: "${payload}"}}) {
+        id
+        id_jadwal_praktek
+        id_klien
+        id_layanan
+        id_psikologi
+        jadwal_praktek {
+          hari
+          jam_mulai
+          jam_selesai
+        }
+        layanan {
+          kategori
+          nama
+          deskripsi
+        }
+        status
+        tanggal
+        updated_at
+        user {
+          email
+          initial
+          jenis_kelamin
+          nama
+          no_hp
+          role
+        }
+        userByIdPsikologi {
+          email
+          initial
+          nama
+          jenis_kelamin
+          no_hp
+          no_karyawan
+          role
+        }
+      }
+    }
+  `;
+  try {
+    const data = await axios.post(
+      API_URL,
+      { query: API_QUERY },
+      { headers: API_HEADERS }
+    );
+    return data.data.data.pptuii_v2_pelayanan;
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: `${error}`,
+    });
+    return;
+  }
+};

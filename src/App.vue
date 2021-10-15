@@ -28,13 +28,18 @@ body {
   color: #333;
 }
 
-.btn-primary {
+.btn-primary,
+.bg-primary {
   background-color: #8e64f3 !important;
   border-color: #8e64f3 !important;
 }
 
 .text-primary {
   color: #8e64f3 !important;
+}
+
+.table-primary {
+  --bs-table-bg: #d3c3f8 !important;
 }
 
 .text-h1 {

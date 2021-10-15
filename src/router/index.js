@@ -15,6 +15,11 @@ import TambahPemeriksaanKlien from "@/views/klien/Pemeriksaan";
 import HomePsikolog from "@/views/psikolog/Home";
 import PraktekPsikolog from "@/views/psikolog/Praktek";
 
+// ? Admin
+import HomeAdmin from "@/views/admin/Home";
+import MasterPsikologAdmin from "@/views/admin/Psikolog";
+import MasterKlien from "@/views/admin/Klien";
+
 const routes = [
   {
     path: "/login",
@@ -50,6 +55,21 @@ const routes = [
     path: "/praktek",
     name: "PraktekPsikolog",
     component: PraktekPsikolog,
+  },
+  {
+    path: "/admin",
+    name: "HomeAdmin",
+    component: HomeAdmin,
+  },
+  {
+    path: "/admin/psikolog",
+    name: "MasterPsikologAdmin",
+    component: MasterPsikologAdmin,
+  },
+  {
+    path: "/admin/klien",
+    name: "MasterKlien",
+    component: MasterKlien,
   },
 ];
 
