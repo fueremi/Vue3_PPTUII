@@ -10,7 +10,7 @@
       </h1>
 
       <h2 class="text-h2">
-        Master Data <span class="text-primary">Psikolog/Associate</span>
+        Master Data <span class="text-primary">Admin</span>
       </h2>
       <div class="d-flex justify-content-between align-items-center">
         <button
@@ -26,13 +26,9 @@
       </div>
 
       <div class="row mt-3 ">
-        <div
-          class="col-md-3 px-4 pb-4"
-          v-for="psikologAssociate in psikologAssociate"
-          :key="psikologAssociate.id"
-        >
+        <div class="col-md-3 px-4 pb-4" v-for="admin in admin" :key="admin.id">
           <TableUser
-            :user="psikologAssociate"
+            :user="admin"
             :toggle="toggle"
             @on-toggle-status="changeStatusUser"
           />
@@ -53,7 +49,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title text-h2" id="exampleModalLabel">
-            Tambah User <span class="text-primary">Psikolog/Associate</span>
+            Tambah User <span class="text-primary">Admin</span>
           </h5>
           <button
             type="button"
@@ -71,8 +67,8 @@
                   type="text"
                   class="form-control text-h3"
                   id="nama"
-                  placeholder="Masukkan nama"
-                  v-model="newPA.nama"
+                  placeholder="Masukkan nama anda"
+                  v-model="newAdmin.nama"
                 />
               </div>
 
@@ -84,8 +80,8 @@
                   type="text"
                   class="form-control text-h3"
                   id="inisial_nama"
-                  placeholder="Masukkan inisial nama"
-                  v-model="newPA.inisial_nama"
+                  placeholder="Masukkan inisial nama anda"
+                  v-model="newAdmin.inisial_nama"
                 />
               </div>
               <div class="col-md-6 mb-3">
@@ -94,22 +90,9 @@
                   type="text"
                   class="form-control text-h3"
                   id="no_karyawan"
-                  placeholder="Masukkan no karyawan"
-                  v-model="newPA.no_karyawan"
+                  placeholder="Masukkan no karyawan anda"
+                  v-model="newAdmin.no_karyawan"
                 />
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="role" class="form-label">Role</label>
-                <select
-                  class="form-select text-h3"
-                  id="role"
-                  aria-label="Default select example"
-                  v-model="newPA.role"
-                >
-                  <option :value="null" selected>Pilih role</option>
-                  <option value="associate">Associate</option>
-                  <option value="psikolog">Psikolog</option>
-                </select>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="jenis_kelamin" class="form-label"
@@ -119,12 +102,13 @@
                   class="form-select text-h3"
                   id="jenis_kelamin"
                   aria-label="Default select example"
-                  v-model="newPA.jenis_kelamin"
+                  v-model="newAdmin.jenis_kelamin"
                 >
-                  <option :value="null" selected>Pilih jenis kelamin</option>
+                  <option :value="null" selected
+                    >Pilih jenis kelamin anda</option
+                  >
                   <option value="l">Laki-Laki</option>
                   <option value="p">Perempuan</option>
-                  <option value="a">Associate</option>
                 </select>
               </div>
               <div class="col-md-6 mb-3">
@@ -143,8 +127,8 @@
                     type="text"
                     class="form-control text-h3"
                     id="no_hp"
-                    placeholder="Masukkan no handphone"
-                    v-model="newPA.no_hp"
+                    placeholder="Masukkan no handphone anda"
+                    v-model="newAdmin.no_hp"
                   />
                 </div>
               </div>
@@ -154,8 +138,8 @@
                   type="text"
                   class="form-control text-h3"
                   id="username"
-                  placeholder="Masukkan username"
-                  v-model="newPA.username"
+                  placeholder="Masukkan username anda"
+                  v-model="newAdmin.username"
                 />
               </div>
               <div class="col-md-6 mb-3">
@@ -164,8 +148,8 @@
                   type="text"
                   class="form-control text-h3"
                   id="email"
-                  placeholder="Masukkan email"
-                  v-model="newPA.email"
+                  placeholder="Masukkan email anda"
+                  v-model="newAdmin.email"
                 />
               </div>
               <div class="col-md-6 mb-3">
@@ -174,8 +158,8 @@
                   type="password"
                   class="form-control text-h3"
                   id="password"
-                  placeholder="Masukkan password"
-                  v-model="newPA.password"
+                  placeholder="Masukkan password anda"
+                  v-model="newAdmin.password"
                 />
               </div>
               <div class="col-md-6 mb-3">
@@ -186,8 +170,8 @@
                   type="password"
                   class="form-control text-h3"
                   id="konfirmasi_password"
-                  placeholder="Masukkan lagi password"
-                  v-model="newPA.konfirmasi_password"
+                  placeholder="Masukkan lagi password anda"
+                  v-model="newAdmin.konfirmasi_password"
                 />
               </div>
             </div>
@@ -217,9 +201,9 @@ import Loading from "@/components/Loading";
 import TableUser from "@/components/TableUser";
 
 import {
-  getUserPsikologAssociate,
+  getUserAdmin,
   updateNewStatus,
-  addNewPA,
+  addNewAdmin,
 } from "@/services/apis/user";
 
 export default {
@@ -231,25 +215,127 @@ export default {
   data() {
     return {
       loading: false,
-      psikologAssociate: null,
+      admin: null,
       toggle: false,
-      newPA: {
+      newAdmin: {
         nama: null,
         inisial_nama: null,
         no_karyawan: null,
-        role: null,
         jenis_kelamin: null,
         no_hp: null,
         username: null,
         password: null,
         email: null,
         konfirmasi_password: null,
+        loading: false,
       },
     };
   },
   methods: {
     onToggle() {
       this.toggle = !this.toggle;
+    },
+    async onToggleStatus() {
+      Swal.fire({
+        title: "Apakah kamu yakin?",
+        text: "Kamu akan mengubah status user ini!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#8e64f3",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Saya yakin!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const hasil = await updateNewStatus({
+            status: !this.user.status,
+            id: this.user.id,
+          });
+          if (hasil > 0) {
+            Swal.fire({
+              icon: "success",
+              title: "Yeay...",
+              html: `<span class="text-primary">Status</span> User berhasil diubah!`,
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              html: `<span class="text-primary">Status/span> User gagal diubah!`,
+            });
+          }
+          this.toggle = false;
+        }
+      });
+    },
+    async onSubmit() {
+      // ? Validasi jika field kosong
+      this.loading = true;
+      const myModal = document.querySelector("[data-bs-dismiss]");
+      if (
+        !this.newAdmin.nama ||
+        !this.newAdmin.inisial_nama ||
+        !this.newAdmin.no_karyawan ||
+        !this.newAdmin.jenis_kelamin ||
+        !this.newAdmin.no_hp ||
+        !this.newAdmin.username ||
+        !this.newAdmin.email ||
+        !this.newAdmin.password ||
+        !this.newAdmin.konfirmasi_password
+      ) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Anda harus mengisi semua field!",
+        });
+        this.loading = false;
+        return;
+      }
+
+      // todo validasi no_hp, email dan username (unique)
+
+      // ? validasi konfirmasi password dengan password
+      if (this.newAdmin.password !== this.newAdmin.konfirmasi_password) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          html: `Kombinasi <span class="text-primary">Password & Konfirmasi Password</span> yang kamu masukkan tidak cocok! <hr> <small>Silahkan masukkan kembali <span class="text-primary">Password & Konfirmasi Password</span> kamu</small>`,
+        });
+        this.newAdmin.konfirmasi_password = null;
+        this.loading = false;
+        return;
+      }
+
+      myModal.click();
+
+      const result = await addNewAdmin(this.newAdmin);
+      this.newAdmin = {
+        nama: null,
+        inisial_nama: null,
+        no_karyawan: null,
+        jenis_kelamin: null,
+        no_hp: null,
+        username: null,
+        password: null,
+        email: null,
+        konfirmasi_password: null,
+        loading: false,
+      };
+      if (result > 0) {
+        Swal.fire({
+          icon: "success",
+          title: "Yeay...",
+          html: `Berhasil menambahkan User <span class="text-primary>Admin</span> baru!`,
+        });
+
+        this.admin = await getUserAdmin();
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          html: `Gagal menambahkan User <span class="text-primary">Admin</span> baru! <hr> <small>Silahkan coba beberapa saat lagi!</small>`,
+        });
+      }
+      this.loading = false;
     },
     async changeStatusUser(payload) {
       this.loading = true;
@@ -268,7 +354,7 @@ export default {
             id: payload.id,
           });
           if (hasil > 0) {
-            this.psikologAssociate = await getUserPsikologAssociate();
+            this.admin = await getUserAdmin();
             Swal.fire({
               icon: "success",
               title: "Yeay...",
@@ -294,82 +380,10 @@ export default {
         }
       });
     },
-    async onSubmit() {
-      // ? Validasi jika field kosong
-      this.loading = true;
-      const myModal = document.querySelector("[data-bs-dismiss]");
-      if (
-        !this.newPA.nama ||
-        !this.newPA.inisial_nama ||
-        !this.newPA.no_karyawan ||
-        !this.newPA.role ||
-        !this.newPA.jenis_kelamin ||
-        !this.newPA.no_hp ||
-        !this.newPA.username ||
-        !this.newPA.email ||
-        !this.newPA.password ||
-        !this.newPA.konfirmasi_password
-      ) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Anda harus mengisi semua field!",
-        });
-        this.loading = false;
-        return;
-      }
-
-      // todo validasi no_hp, email dan username (unique)
-
-      // ? validasi konfirmasi password dengan password
-      if (this.newPA.password !== this.newPA.konfirmasi_password) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          html: `Kombinasi <span class="text-primary">Password & Konfirmasi Password</span> yang kamu masukkan tidak cocok! <hr> <small>Silahkan masukkan kembali <span class="text-primary">Password & Konfirmasi Password</span> kamu</small>`,
-        });
-        this.newPA.konfirmasi_password = null;
-        this.loading = false;
-        return;
-      }
-
-      myModal.click();
-
-      const result = await addNewPA(this.newPA);
-      this.newPA = {
-        nama: null,
-        inisial_nama: null,
-        no_karyawan: null,
-        role: null,
-        jenis_kelamin: null,
-        no_hp: null,
-        username: null,
-        password: null,
-        email: null,
-        konfirmasi_password: null,
-        loading: false,
-      };
-      if (result > 0) {
-        Swal.fire({
-          icon: "success",
-          title: "Yeay...",
-          html: `Berhasil menambahkan User <span class="text-primary>Admin</span> baru!`,
-        });
-
-        this.psikologAssociate = await getUserPsikologAssociate();
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          html: `Gagal menambahkan User <span class="text-primary">Admin</span> baru! <hr> <small>Silahkan coba beberapa saat lagi!</small>`,
-        });
-      }
-      this.loading = false;
-    },
   },
   async created() {
     this.loading = true;
-    this.psikologAssociate = await getUserPsikologAssociate();
+    this.admin = await getUserAdmin();
     this.loading = false;
   },
 };
@@ -382,5 +396,9 @@ export default {
   background: url("https://pptuii.id/wp-content/uploads/2020/10/psychiatrist_13.png")
     no-repeat center center/cover;
   padding: 16px;
+
+  .input-group-text {
+    padding: 0.3rem 0.5rem;
+  }
 }
 </style>

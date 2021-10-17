@@ -125,7 +125,7 @@ export const verifySession = async (payload) => {
 export const registerUser = async (payload) => {
   const API_QUERY = `
   mutation addNewPasien {
-    insert_pptuii_v2_user(objects: {email: "${payload.email}", initial: "${payload.initial}", jenis_kelamin: "${payload.jenis_kelamin}", nama: "${payload.nama}", no_hp: "${payload.no_hp}", password: "${payload.password}", role: "klien", username: "${payload.username}"}) {
+    insert_pptuii_v2_user(objects: {email: "${payload.email}", initial: "${payload.initial}", jenis_kelamin: "${payload.jenis_kelamin}", nama: "${payload.nama}", no_hp: "${payload.no_hp}", password: "${payload.password}", role: "klien", username: "${payload.username}", status: true}) {
       affected_rows
     }
   }  

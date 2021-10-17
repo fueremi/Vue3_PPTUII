@@ -19,6 +19,7 @@ import PraktekPsikolog from "@/views/psikolog/Praktek";
 import HomeAdmin from "@/views/admin/Home";
 import MasterPsikologAdmin from "@/views/admin/Psikolog";
 import MasterKlien from "@/views/admin/Klien";
+import MasterAdmin from "@/views/admin/Admin";
 
 const routes = [
   {
@@ -62,14 +63,19 @@ const routes = [
     component: HomeAdmin,
   },
   {
-    path: "/admin/psikolog",
+    path: "/admin/master-psikolog",
     name: "MasterPsikologAdmin",
     component: MasterPsikologAdmin,
   },
   {
-    path: "/admin/klien",
+    path: "/admin/master-klien",
     name: "MasterKlien",
     component: MasterKlien,
+  },
+  {
+    path: "/admin/master-admin",
+    name: "MasterAdmin",
+    component: MasterAdmin,
   },
 ];
 

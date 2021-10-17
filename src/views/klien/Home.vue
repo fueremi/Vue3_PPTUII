@@ -43,7 +43,7 @@
               <td scope="col">Kontak</td>
             </tr>
           </thead>
-          <tbody>
+          <tbody v-if="pelayananKlien.length > 0">
             <tr v-for="(data, index) in pelayananKlien" :key="data.id">
               <th scope="row" class="text-center">{{ index + 1 }}</th>
               <td class="text-center text-primary text-capitalize align-middle">
@@ -82,6 +82,14 @@
                 <span class="badge rounded-pill bg-primary"
                   ><i class="fas fa-trash"></i
                 ></span>
+              </td>
+            </tr>
+          </tbody>
+          <tbody v-else>
+            <tr>
+              <td colspan="7" class="text-center">
+                Kamu belum memiliki
+                <span class="text-primary">Jadwal Pelayanan</span>
               </td>
             </tr>
           </tbody>

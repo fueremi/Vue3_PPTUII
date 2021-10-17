@@ -9,9 +9,11 @@
         }}</span>
       </h1>
 
-      <h2 class="text-h2">Master <span class="text-primary">Klien</span></h2>
-      <div class="row gap-3 mt-4">
-        <div class="col-md-3" v-for="klien in klien" :key="klien.id">
+      <h2 class="text-h2">
+        Master Data <span class="text-primary">Klien</span>
+      </h2>
+      <div class="row mt-3 ">
+        <div class="col-md-3 px-4 pb-4" v-for="klien in klien" :key="klien.id">
           <TableUser :user="klien" />
         </div>
       </div>

@@ -53,6 +53,9 @@
             :to="{ name: 'HomeAdmin' }"
             >Home</router-link
           >
+          <router-link class="nav-link" :to="{ name: 'MasterAdmin' }"
+            >Admin</router-link
+          >
           <router-link class="nav-link" :to="{ name: 'MasterPsikologAdmin' }"
             >Psikolog/Associate</router-link
           >

@@ -8,7 +8,7 @@
         v-if="toggle"
         :class="[toggle ? 'pulsate-fwd' : '']"
         class="fas fa-ban text-primary"
-        @click="onToggleStatus"
+        @click="$emit('on-toggle-status', { id: user.id, status: user.status })"
       ></i
     ></span>
     <div class="col-md-4 w-auto">
@@ -19,7 +19,9 @@
     <div class="col md-8 align-items-center">
       <p class="text-h2 m-0 text-capitalize lh-sm">{{ user.nama }}</p>
       <p v-if="user.jenis_kelamin" class="text-h3 m-0 lh-sm">
-        {{ user.jenis_kelamin === "l" ? "Laki-Laki" : "Perempuan" }}
+        {{ user.jenis_kelamin === "l" ? "Laki-Laki" : "" }}
+        {{ user.jenis_kelamin === "p" ? "Perempuan" : "" }}
+        {{ user.jenis_kelamin === "a" ? "Associate" : "" }}
       </p>
       <p class="text-h3 m-0 lh-1">{{ user.email }}</p>
     </div>
@@ -39,7 +41,7 @@
 <script>
 import Swal from "sweetalert2";
 
-import { updateNewPassword, updateNewStatus } from "@/services/apis/user";
+import { updateNewPassword } from "@/services/apis/user";
 
 export default {
   name: "TableUser",
@@ -89,38 +91,6 @@ export default {
         }
       }
     },
-    async onToggleStatus() {
-      Swal.fire({
-        title: "Apakah kamu yakin?",
-        text: "Kamu akan mengubah status user ini!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#8e64f3",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Saya yakin!",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          const hasil = await updateNewStatus({
-            status: !this.user.status,
-            id: this.user.id,
-          });
-          if (hasil > 0) {
-            Swal.fire({
-              icon: "success",
-              title: "Yeay...",
-              html: `<span class="text-primary">Status</span> User berhasil diubah!`,
-            });
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              html: `<span class="text-primary">Status/span> User gagal diubah!`,
-            });
-          }
-          this.toggle = false;
-        }
-      });
-    },
   },
 };
 </script>
@@ -141,6 +111,10 @@ export default {
     position: absolute;
     top: 5px;
     right: 5px;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 }
 </style>

@@ -190,7 +190,7 @@ export default {
         Swal.fire({
           icon: "success",
           title: "Yeay...",
-          html: `<span class="text-primary">Akun</span kamu berhasil dibuat! Silahkan untuk <span class="text-primary">Login</span><small>Mengarahkan kamu ke <span class="text-primary">Halaman Login</span></small>`,
+          html: `<span class="text-primary">Akun</span> kamu berhasil dibuat! Silahkan untuk <span class="text-primary">Login</span> <hr> <small>Mengarahkan kamu ke <span class="text-primary">Halaman Login</span></small>`,
         });
         this.loading = false;
         this.$router.push({ name: "Login" });
