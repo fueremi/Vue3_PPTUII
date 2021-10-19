@@ -8,22 +8,36 @@
           this.$store.state.session.nama
         }}</span>
       </h1>
+      <div class="mt-4">
+        <h2 class="text-primary text-h2">Jadwal Pelayanan Anda</h2>
+        <TablePelayanan v-if="allPelayanan" :pelayanan="allPelayanan" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import Loading from "@/components/Loading";
+import TablePelayanan from "@/components/TablePelayanan";
+
+import { getAllPelayanan } from "@/services/apis/pelayanan";
 
 export default {
   name: "HomeAdmin",
   components: {
     Loading,
+    TablePelayanan,
   },
   data() {
     return {
       loading: false,
+      allPelayanan: null,
     };
+  },
+  async created() {
+    this.loading = true;
+    this.allPelayanan = await getAllPelayanan();
+    this.loading = false;
   },
 };
 </script>

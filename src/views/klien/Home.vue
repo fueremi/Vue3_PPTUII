@@ -13,107 +13,79 @@
       >
       <div class="mt-4">
         <h2 class="text-primary text-h2">Jadwal Pelayanan Anda</h2>
-        <table
-          class="table table-sm table-responsive table-hover table-bordered text-h3"
-        >
-          <thead class="text-center fw-bold">
-            <tr class="table-primary">
-              <th scope="col" rowspan="2">No</th>
-              <th scope="col" rowspan="2">Status</th>
-              <th
-                scope="col"
-                colspan="2"
-                v-if="this.$store.state.session.role !== 'klien'"
-              >
-                Klien
-              </th>
-              <th scope="col" rowspan="2">Layanan</th>
-              <th scope="col" rowspan="2">Jadwal Praktek</th>
-              <th scope="col" colspan="2">Psikolog/Associate</th>
-              <th scope="col" rowspan="2">Aksi</th>
-            </tr>
-            <tr class="table-primary">
-              <td v-if="this.$store.state.session.role !== 'klien'" scope="col">
-                Nama
-              </td>
-              <td v-if="this.$store.state.session.role !== 'klien'" scope="col">
-                Kontak
-              </td>
-              <td scope="col">Nama</td>
-              <td scope="col">Kontak</td>
-            </tr>
-          </thead>
-          <tbody v-if="pelayananKlien.length > 0">
-            <tr v-for="(data, index) in pelayananKlien" :key="data.id">
-              <th scope="row" class="text-center">{{ index + 1 }}</th>
-              <td class="text-center text-primary text-capitalize align-middle">
-                <span
-                  class="badge rounded-pill bg-primary text-wrap"
-                  v-if="data.status === 'request_kta'"
-                  >Menunggu
-                </span>
-              </td>
-              <td
-                class="text-capitalize"
-                v-if="this.$store.state.session.role !== 'klien'"
-              >
-                {{ data.user.nama }}
-              </td>
-              <td v-if="this.$store.state.session.role !== 'klien'">
-                {{ data.user.no_hp }}
-              </td>
-              <td class="text-capitalize">
-                {{ data.layanan.kategori }} - {{ data.layanan.nama }}
-              </td>
-              <td class="text-capitalize">
-                {{ data.jadwal_praktek.hari }},
-                {{ data.jadwal_praktek.jam_mulai }} -
-                {{ data.jadwal_praktek.jam_selesai }}
-              </td>
-              <td class="text-capitalize">
-                {{ data.userByIdPsikologi.role }} -
-                {{ data.userByIdPsikologi.nama }}
-              </td>
-              <td>{{ data.userByIdPsikologi.no_hp }}</td>
-              <td class="text-center align-middle">
-                <span class="badge rounded-pill bg-primary me-1"
-                  ><i class="fas fa-edit"></i
-                ></span>
-                <span class="badge rounded-pill bg-primary"
-                  ><i class="fas fa-trash"></i
-                ></span>
-              </td>
-            </tr>
-          </tbody>
-          <tbody v-else>
-            <tr>
-              <td colspan="7" class="text-center">
-                Kamu belum memiliki
-                <span class="text-primary">Jadwal Pelayanan</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <TablePelayanan
+          v-if="pelayananKlien"
+          :pelayanan="pelayananKlien"
+          @on-click-cancel="onClickCancel"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Loading from "@/components/Loading";
+import Swal from "sweetalert2";
 
-import { getPelayananByIdKlien } from "@/services/apis/pelayanan";
+import Loading from "@/components/Loading";
+import TablePelayanan from "@/components/TablePelayanan";
+
+import {
+  getPelayananByIdKlien,
+  cancelPelayanan,
+} from "@/services/apis/pelayanan";
 
 export default {
   name: "HomeKlien",
   components: {
     Loading,
+    TablePelayanan,
   },
   data() {
     return {
       loading: false,
       pelayananKlien: null,
     };
+  },
+  methods: {
+    onClickCancel(id) {
+      Swal.fire({
+        title: "Apakah kamu yakin?",
+        html: `Kamu akan membatalkan <span class="text-primary">Pelayanan</span> ini! <hr> <small>Setelah membatalkan, <span class="text-primary">Pelayanan</span> tidak dapat diubah lagi!</small>`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#8e64f3",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Saya yakin!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          this.loading = true;
+          const hasil = await cancelPelayanan(id);
+          if (hasil > 0) {
+            this.pelayananKlien = await getPelayananByIdKlien(
+              this.$store.state.session.id
+            );
+            Swal.fire({
+              icon: "success",
+              title: "Yeay...",
+              html: `<span class="text-primary">Pelayanan</span> berhasil dibatalkan!`,
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              html: `Gagal membatalkan <span class="text-primary">Pelayanan</span> <hr> <small>Silahkan coba beberapa saat lagi!</small>`,
+            });
+          }
+          this.loading = false;
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            html: `Pembatalan <span class="text-primary">Pelayanan</span> dibatalkan!`,
+          });
+        }
+      });
+    },
   },
   async created() {
     this.loading = true;
@@ -168,19 +140,6 @@ export default {
       background-color: #8e64f3;
       color: #fff;
       border-radius: 50%;
-    }
-  }
-
-  .table {
-    border-color: #555;
-
-    thead,
-    tbody {
-      vertical-align: middle !important;
-    }
-
-    &-primary {
-      border-color: #555;
     }
   }
 }

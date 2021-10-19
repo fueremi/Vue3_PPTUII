@@ -1,8 +1,49 @@
-<template> <div class="home-psikolog"></div></template>
+<template>
+  <Loading v-if="loading" />
+  <div class="home-psikolog">
+    <div class="container mt-3">
+      <h1 class="text-h1">
+        Selamat datang, Admin
+        <span class="text-primary text-capitalize text-decoration-underline">{{
+          this.$store.state.session.nama
+        }}</span>
+      </h1>
+      <div class="mt-4">
+        <h2 class="text-primary text-h2">Jadwal Pelayanan Pasien Anda</h2>
+        <TablePelayanan
+          v-if="pelayananPsikolog"
+          :pelayanan="pelayananPsikolog"
+        />
+      </div>
+    </div>
+  </div>
+</template>
 
 <script>
+import Loading from "@/components/Loading";
+import TablePelayanan from "@/components/TablePelayanan";
+
+import { getPelayananByIdPsikolog } from "@/services/apis/pelayanan";
+
 export default {
   name: "HomePsikolog",
+  components: {
+    Loading,
+    TablePelayanan,
+  },
+  data() {
+    return {
+      loading: false,
+      pelayananPsikolog: null,
+    };
+  },
+  async created() {
+    this.loading = true;
+    this.pelayananPsikolog = await getPelayananByIdPsikolog(
+      this.$store.state.session.id
+    );
+    this.loading = false;
+  },
 };
 </script>
 

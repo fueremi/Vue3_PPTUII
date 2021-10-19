@@ -8,7 +8,8 @@
         >Kembali
       </router-link>
       <h1 class="my-4">
-        Daftar Layanan
+        <span v-if="this.$route.params.idpelayanan">Ubah</span
+        ><span v-else>Daftar</span> Layanan
         <span class="text-primary text-decoration-underline">{{
           layanan.nama
         }}</span>
@@ -127,9 +128,18 @@
           </nav>
         </div>
       </div>
+
       <button
         class="btn btn-primary btn-sm text-h3"
-        v-if="approve"
+        v-if="this.$route.params.idpelayanan && approve"
+        @click="submitEditPelayanan"
+      >
+        Simpan Edit Pelayanan
+      </button>
+
+      <button
+        v-else-if="!this.$route.params.idpelayanan && approve"
+        class="btn btn-primary btn-sm text-h3"
         @click="submitPelayanan"
       >
         Submit Pelayanan
@@ -145,7 +155,11 @@ import {
   getAllPsikologAssociate,
   getLengthJadwalPraktek,
 } from "@/services/apis/klien";
-import { addNewPelayanan } from "@/services/apis/pelayanan";
+import {
+  addNewPelayanan,
+  updatePelayanan,
+  getPelayananById,
+} from "@/services/apis/pelayanan";
 import { getJadwalById } from "@/services/apis/psikolog";
 
 import Swal from "sweetalert2";
@@ -170,6 +184,7 @@ export default {
       offset: 0,
       limit: 6,
       dataLength: null,
+      temp: null,
     };
   },
   computed: {
@@ -207,7 +222,6 @@ export default {
         id_psikolog: this.pelayanan.id_psikolog,
         id_layanan: this.layanan.id,
       });
-      console.log(result);
       if (result > 0) {
         Swal.fire({
           icon: "success",
@@ -226,9 +240,36 @@ export default {
         this.$router.push({ name: "LayananKlien" });
       }
     },
+    async submitEditPelayanan() {
+      this.loading = true;
+      const hasil = await updatePelayanan({
+        id: this.$route.params.idpelayanan,
+        idJadwalPraktek: this.pelayanan.id,
+        idPsikolog: this.pelayanan.id_psikolog,
+      });
+      if (hasil > 0) {
+        Swal.fire({
+          icon: "success",
+          title: "Yeay...",
+          html: `Request <span class="text-primary">Pelayanan</span> berhasil diubah. <hr> <small>Silahkan menunggu balasan dari <span class="text-primary">Kami</span> untuk Info lebih lanjut</small>`,
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          html: `Request <span class="text-primary">Pelayanan</span> gagal diubah. <hr> <small>Silahkan coba beberapa saat lagi!</small>`,
+        });
+      }
+      this.loading = false;
+      this.$router.push({ name: "HomeKlien" });
+    },
   },
   async created() {
     this.loading = true;
+    if (this.$route.params.idpelayanan) {
+      this.temp = await getPelayananById(this.$route.params.idpelayanan);
+      this.pelayanan = await getJadwalById(this.temp[0].id_jadwal_praktek);
+    }
     this.layanan = await getLayananById(this.$route.params.id);
     this.dataLength = await getLengthJadwalPraktek();
 
