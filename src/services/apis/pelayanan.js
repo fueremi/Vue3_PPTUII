@@ -43,6 +43,8 @@ export const getAllPelayanan = async () => {
         id_klien
         id_layanan
         id_psikologi
+        tanggal
+        jam
         jadwal_praktek {
           hari
           jam_mulai
@@ -97,11 +99,46 @@ export const getPelayananById = async (payload) => {
   // pptuii_v2_layanan(where: {kategori: {_eq: "Layanan Organisasi"}}) {
   const API_QUERY = `
   query MyQuery {
-    pptuii_v2_pelayanan(where: {id: {_eq: "${payload}"}}, order_by: {status: desc}) {
+    pptuii_v2_pelayanan(where: {id: {_eq: "${payload}"}}) {
+      id
       id_jadwal_praktek
       id_klien
       id_layanan
       id_psikologi
+      tanggal
+      jam
+      hasil
+      bukti_pembayaran
+      jadwal_praktek {
+        hari
+        jam_mulai
+        jam_selesai
+      }
+      layanan {
+        kategori
+        nama
+        deskripsi
+      }
+      status
+      tanggal
+      updated_at
+      user {
+        email
+        initial
+        jenis_kelamin
+        nama
+        no_hp
+        role
+      }
+      userByIdPsikologi {
+        email
+        initial
+        nama
+        jenis_kelamin
+        no_hp
+        no_karyawan
+        role
+      }
     }
   }
   
@@ -133,6 +170,8 @@ export const getPelayananByIdKlien = async (payload) => {
         id_klien
         id_layanan
         id_psikologi
+        tanggal
+        jam
         jadwal_praktek {
           hari
           jam_mulai
@@ -193,6 +232,8 @@ export const getPelayananByIdPsikolog = async (payload) => {
         id_klien
         id_layanan
         id_psikologi
+        tanggal
+        jam
         jadwal_praktek {
           hari
           jam_mulai
@@ -276,6 +317,156 @@ export const updatePelayanan = async (payload) => {
       affected_rows
     }
   }  
+  `;
+  try {
+    const data = await axios.post(
+      API_URL,
+      { query: API_QUERY },
+      { headers: API_HEADERS }
+    );
+    return data.data.data.update_pptuii_v2_pelayanan.affected_rows;
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: `${error}`,
+    });
+    return;
+  }
+};
+
+export const adminToPA = async (payload) => {
+  const API_QUERY = `
+  mutation adminToPA {
+    update_pptuii_v2_pelayanan(where: {id: {_eq: "${payload.id}"}}, _set: {tanggal: "${payload.tanggal}",jam: "${payload.jam}", status: "request_atpa"}) {
+      affected_rows
+    }
+  }
+  `;
+  try {
+    const data = await axios.post(
+      API_URL,
+      { query: API_QUERY },
+      { headers: API_HEADERS }
+    );
+    return data.data.data.update_pptuii_v2_pelayanan.affected_rows;
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: `${error}`,
+    });
+    return;
+  }
+};
+
+export const PAToKlien = async (payload) => {
+  const API_QUERY = `
+  mutation PAToKlien {
+    update_pptuii_v2_pelayanan(where: {id: {_eq: "${payload}"}}, _set: {status: "request_patk"}) {
+      affected_rows
+    }
+  }
+  `;
+  try {
+    const data = await axios.post(
+      API_URL,
+      { query: API_QUERY },
+      { headers: API_HEADERS }
+    );
+    return data.data.data.update_pptuii_v2_pelayanan.affected_rows;
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: `${error}`,
+    });
+    return;
+  }
+};
+
+export const approveByKlien = async (payload) => {
+  const API_QUERY = `
+  mutation approveByKlien {
+    update_pptuii_v2_pelayanan(where: {id: {_eq: "${payload}"}}, _set: {status: "approve"}) {
+      affected_rows
+    }
+  }
+  `;
+  try {
+    const data = await axios.post(
+      API_URL,
+      { query: API_QUERY },
+      { headers: API_HEADERS }
+    );
+    return data.data.data.update_pptuii_v2_pelayanan.affected_rows;
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: `${error}`,
+    });
+    return;
+  }
+};
+
+export const uploadDokumen = async (payload) => {
+  const API_QUERY = `
+  mutation uploadDokumen {
+    update_pptuii_v2_pelayanan(where: {id: {_eq: "${payload.id}"}}, _set: {hasil: "${payload.hasil}", status: "request_bp"}) {
+      affected_rows
+    }
+  }
+  `;
+  try {
+    const data = await axios.post(
+      API_URL,
+      { query: API_QUERY },
+      { headers: API_HEADERS }
+    );
+    return data.data.data.update_pptuii_v2_pelayanan.affected_rows;
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: `${error}`,
+    });
+    return;
+  }
+};
+
+export const uploadBuktiPembayaran = async (payload) => {
+  const API_QUERY = `
+  mutation uploadBuktiPembayaran {
+    update_pptuii_v2_pelayanan(where: {id: {_eq: "${payload.id}"}}, _set: {bukti_pembayaran: "${payload.hasil}", status: "request_cbp"}) {
+      affected_rows
+    }
+  }
+  `;
+  try {
+    const data = await axios.post(
+      API_URL,
+      { query: API_QUERY },
+      { headers: API_HEADERS }
+    );
+    return data.data.data.update_pptuii_v2_pelayanan.affected_rows;
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: `${error}`,
+    });
+    return;
+  }
+};
+
+export const setStatusDone = async (payload) => {
+  const API_QUERY = `
+  mutation done {
+    update_pptuii_v2_pelayanan(where: {id: {_eq: "${payload}"}}, _set: {status: "done"}) {
+      affected_rows
+    }
+  }
   `;
   try {
     const data = await axios.post(

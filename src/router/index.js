@@ -6,20 +6,23 @@ import Swal from "sweetalert2";
 import Login from "@/views/auth/Login";
 import Daftar from "@/views/auth/Daftar";
 
-// ? Pasien
+// ? Klien
 import HomeKlien from "@/views/klien/Home";
 import LayananKlien from "@/views/klien/Layanan";
 import TambahPemeriksaanKlien from "@/views/klien/Pemeriksaan";
+import DetailPelayananKlien from "@/views/klien/DetailPelayanan";
 
 // ? Psikolog
 import HomePsikolog from "@/views/psikolog/Home";
 import PraktekPsikolog from "@/views/psikolog/Praktek";
+import UploadHasilPsikolog from "@/views/psikolog/UploadHasil";
 
 // ? Admin
 import HomeAdmin from "@/views/admin/Home";
 import MasterPsikologAdmin from "@/views/admin/Psikolog";
 import MasterKlien from "@/views/admin/Klien";
 import MasterAdmin from "@/views/admin/Admin";
+import AturJadwal from "@/views/admin/AturJadwal";
 
 const routes = [
   {
@@ -48,14 +51,24 @@ const routes = [
     component: TambahPemeriksaanKlien,
   },
   {
+    path: "/klien/pelayanan/:id",
+    name: "DetailPelayananKlien",
+    component: DetailPelayananKlien,
+  },
+  {
     path: "/psikolog",
     name: "HomePsikolog",
     component: HomePsikolog,
   },
   {
-    path: "/praktek",
+    path: "/psikolog/praktek",
     name: "PraktekPsikolog",
     component: PraktekPsikolog,
+  },
+  {
+    path: "/psikolog/upload-hasil/:id",
+    name: "UploadHasilPsikolog",
+    component: UploadHasilPsikolog,
   },
   {
     path: "/admin",
@@ -76,6 +89,11 @@ const routes = [
     path: "/admin/master-admin",
     name: "MasterAdmin",
     component: MasterAdmin,
+  },
+  {
+    path: "/admin/atur-jadwal/:id",
+    name: "AturJadwalAdmin",
+    component: AturJadwal,
   },
 ];
 

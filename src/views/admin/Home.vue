@@ -9,8 +9,22 @@
         }}</span>
       </h1>
       <div class="mt-4">
-        <h2 class="text-primary text-h2">Jadwal Pelayanan Anda</h2>
-        <TablePelayanan v-if="allPelayanan" :pelayanan="allPelayanan" />
+        <h2 class="text-primary text-h2">Jadwal Pelayanan (Terkonfirmasi)</h2>
+        <TablePelayanan v-if="allPelayanan" :pelayanan="approve" />
+      </div>
+      <div class="mt-4">
+        <h2 class="text-primary text-h2">
+          Jadwal Pelayanan (Perlu Dikonfirmasi)
+        </h2>
+        <TablePelayanan v-if="allPelayanan" :pelayanan="statusKTA" />
+      </div>
+      <div class="mt-4">
+        <h2 class="text-primary text-h2">Jadwal Pelayanan (Menunggu)</h2>
+        <TablePelayanan v-if="allPelayanan" :pelayanan="waiting" />
+      </div>
+      <div class="mt-4">
+        <h2 class="text-primary text-h2">Jadwal Pelayanan (Selesai)</h2>
+        <TablePelayanan v-if="allPelayanan" :pelayanan="done" />
       </div>
     </div>
   </div>
@@ -33,6 +47,34 @@ export default {
       loading: false,
       allPelayanan: null,
     };
+  },
+  computed: {
+    approve() {
+      return this.allPelayanan.filter(
+        (pelayanan) => pelayanan.status === "approve"
+      );
+    },
+    statusKTA() {
+      return this.allPelayanan.filter(
+        (pelayanan) =>
+          pelayanan.status === "request_kta" ||
+          pelayanan.status === "request_cbp"
+      );
+    },
+    done() {
+      return this.allPelayanan.filter(
+        (pelayanan) => pelayanan.status === "done"
+      );
+    },
+    waiting() {
+      return this.allPelayanan.filter(
+        (pelayanan) =>
+          pelayanan.status !== "request_kta" &&
+          pelayanan.status !== "approve" &&
+          pelayanan.status !== "request_cbp" &&
+          pelayanan.status !== "done"
+      );
+    },
   },
   async created() {
     this.loading = true;

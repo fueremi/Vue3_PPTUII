@@ -12,11 +12,50 @@
         >Tambah Pemeriksaan</router-link
       >
       <div class="mt-4">
-        <h2 class="text-primary text-h2">Jadwal Pelayanan Anda</h2>
+        <h2 class="text-h2">
+          Jadwal Pelayanan Anda
+          <span class="text-primary">(Terkonfirmasi)</span>
+        </h2>
         <TablePelayanan
           v-if="pelayananKlien"
-          :pelayanan="pelayananKlien"
+          :pelayanan="approved"
           @on-click-cancel="onClickCancel"
+          @on-approve-by-klien="onClickApprove"
+        />
+      </div>
+      <div class="mt-4">
+        <h2 class="text-h2">
+          <span class="text-primary"
+            >Jadwal Pelayanan Anda (Perlu Dikonfirmasi)</span
+          >
+        </h2>
+        <TablePelayanan
+          v-if="pelayananKlien"
+          :pelayanan="needApprove"
+          @on-click-cancel="onClickCancel"
+          @on-approve-by-klien="onClickApprove"
+        />
+      </div>
+      <div class="mt-4">
+        <h2 class="text-h2">
+          Jadwal Pelayanan Anda <span class="text-primary">(Menunggu)</span>
+        </h2>
+        <TablePelayanan
+          v-if="pelayananKlien"
+          :pelayanan="waiting"
+          @on-click-cancel="onClickCancel"
+          @on-approve-by-klien="onClickApprove"
+        />
+      </div>
+      <div class="mt-4">
+        <h2 class="text-h2">
+          Jadwal Pelayanan Anda <span class="text-primary">(Selesai)</span>
+        </h2>
+        <TablePelayanan
+          v-if="pelayananKlien"
+          :pelayanan="done"
+          @on-click-cancel="onClickCancel"
+          @on-approve-by-klien="onClickApprove"
         />
       </div>
     </div>
@@ -32,6 +71,7 @@ import TablePelayanan from "@/components/TablePelayanan";
 import {
   getPelayananByIdKlien,
   cancelPelayanan,
+  approveByKlien,
 } from "@/services/apis/pelayanan";
 
 export default {
@@ -46,7 +86,73 @@ export default {
       pelayananKlien: null,
     };
   },
+  computed: {
+    approved() {
+      return this.pelayananKlien.filter(
+        (pelayanan) => pelayanan.status === "approve"
+      );
+    },
+    needApprove() {
+      return this.pelayananKlien.filter(
+        (pelayanan) => pelayanan.status === "request_patk"
+      );
+    },
+    done() {
+      return this.pelayananKlien.filter(
+        (pelayanan) =>
+          pelayanan.status === "request_bp" || pelayanan.status === "done"
+      );
+    },
+    waiting() {
+      return this.pelayananKlien.filter(
+        (pelayanan) =>
+          pelayanan.status !== "approve" &&
+          pelayanan.status !== "request_patk" &&
+          pelayanan.status !== "request_bp" &&
+          pelayanan.status !== "done"
+      );
+    },
+  },
   methods: {
+    onClickApprove(id) {
+      Swal.fire({
+        title: "Apakah kamu yakin?",
+        html: `Kamu akan menyetujui <span class="text-primary">Pelayanan</span> ini! <hr> <small>Setelah aprove, <span class="text-primary">Pelayanan</span> tidak dapat dicancel lagi!</small>`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#8e64f3",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Saya yakin!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          this.loading = true;
+          const hasil = await approveByKlien(id);
+          if (hasil > 0) {
+            this.pelayananKlien = await getPelayananByIdKlien(
+              this.$store.state.session.id
+            );
+            Swal.fire({
+              icon: "success",
+              title: "Yeay...",
+              html: `<span class="text-primary">Pelayanan</span> berhasil disetujui!`,
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              html: `Persetujuan <span class="text-primary">Pelayanan</span> gagal!<hr> <small>Silahkan coba beberapa saat lagi!</small>`,
+            });
+          }
+          this.loading = false;
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            html: `Approval <span class="text-primary">Pelayanan</span> dibatalkan!`,
+          });
+        }
+      });
+    },
     onClickCancel(id) {
       Swal.fire({
         title: "Apakah kamu yakin?",
