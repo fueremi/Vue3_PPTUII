@@ -179,7 +179,10 @@
       <form @submit.prevent="onSubmit()" v-if="dokumen">
         <input type="submit" class="btn btn-primary btn-sm text-h3 mt-3" />
       </form>
-      <form @submit.prevent="onKonfirmasiPembayaran()" v-else>
+      <form
+        @submit.prevent="onKonfirmasiPembayaran()"
+        v-else-if="pelayanan[0].status === 'request_bp'"
+      >
         <input
           type="submit"
           class="btn btn-primary btn-sm text-h3 mt-3"
