@@ -30,7 +30,7 @@
       </div>
       <div class="mt-4">
         <h2 class="text-primary text-h2">
-          Jadwal Pelayanan Pasien Anda (Perlu Dikonfirmasi)
+          Jadwal Pelayanan Pasien Anda (Menunggu)
         </h2>
         <TablePelayanan
           v-if="pelayananPsikolog"

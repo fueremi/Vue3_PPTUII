@@ -18,7 +18,10 @@
         <th
           scope="col"
           colspan="2"
-          v-if="this.$store.state.session.role !== 'psikolog'"
+          v-if="
+            this.$store.state.session.role !== 'psikolog' &&
+              this.$store.state.session.role !== 'associate'
+          "
         >
           Psikolog/Associate
         </th>
@@ -120,12 +123,20 @@
         </td>
         <td
           class="text-capitalize"
-          v-if="this.$store.state.session.role !== 'psikolog'"
+          v-if="
+            this.$store.state.session.role !== 'psikolog' &&
+              this.$store.state.session.role !== 'associate'
+          "
         >
           {{ data.userByIdPsikologi.role }} -
           {{ data.userByIdPsikologi.nama }}
         </td>
-        <td v-if="this.$store.state.session.role !== 'psikolog'">
+        <td
+          v-if="
+            this.$store.state.session.role !== 'psikolog' &&
+              this.$store.state.session.role !== 'associate'
+          "
+        >
           {{ data.userByIdPsikologi.no_hp }}
         </td>
         <td
